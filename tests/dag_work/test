@@ -1,0 +1,199 @@
+-- 创建dag作业
+curl --location --request POST 'http://localhost:3072/v1/dag-works' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+		    "name": "dag-slc",
+		    "userId":3,
+		    "description": "dag work test by slc",
+		    "startTime":16476228,
+		    "endTime":1947622861,
+		    "periodCron":"@once",
+            "retries":1,
+            "retryDelay":1,
+		    "relation":"slc_1001 >> slc_1002",
+		    "edges": "edges test",
+		    "nodes": "\n{\n\t\"nodes\":[\n\t\t{\n\t\t\t\"nodeName\":\"slc\",\n\t\t    \"frontId\":1001,\n            \"top\": 500,\n            \"left\": 300,\n            \"workId\": 3,\n            \"description\": \"node description\"\n\t\t},\n\t\t{\n\t\t\t\"nodeName\":\"slc\",\n\t\t    \"frontId\":1002,\n            \"top\": 500,\n            \"left\": 300,\n            \"workId\": 3,\n            \"description\": \"node description\"\n\t\t}\n\t]\n}"
+		}'
+-- 返回结果
+{
+    "code": 0,
+    "data": 9,
+    "msg": null
+}
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- 查找单个
+curl --location --request GET 'http://localhost:3072/v1/dag-works/1'
+-- 结果
+{
+    "code": 0,
+    "data": {
+        "id": 1,
+        "name": "dag-slc",
+        "end_time": 1947622861,
+        "retries": 1,
+        "relation": "slc_110 >> dag_11",
+        "nodes": "{\n\t\"nodes\":[\n\t\t{\n\t\t    \"frontId\":10001,\n            \"top\": 500,\n            \"left\": 300,\n            \"workId\": 3,\n            \"description\": \"node description\"\n\t\t},\n\t\t{\n\t\t    \"frontId\":10001,\n            \"top\": 500,\n            \"left\": 300,\n            \"workId\": 3,\n            \"description\": \"node description\"\n\t\t}\n\t]\n}",
+        "created_at": "2022-03-25T17:50:48",
+        "updated_at": null,
+        "start_time": 164762286,
+        "uuid": "cdeba7db2c124d81b9a00c26a2abea56",
+        "user_id": 3,
+        "period_cron": "@once",
+        "retry_delay": 1,
+        "edges": "edges test",
+        "description": "dag work test by slc",
+        "deleted_at": null
+    },
+    "msg": null
+}
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- 查找列表
+curl --location --request GET 'http://localhost:3072/v1/dag-works?limit=10&offset=0'
+-- 返回结果
+{
+    "code": 0,
+    "data": {
+        "items": [
+            {
+                "id": 1,
+                "name": "dag-slc",
+                "end_time": 1947622861,
+                "retries": 1,
+                "relation": "slc_110 >> dag_11",
+                "nodes": "{\n\t\"nodes\":[\n\t\t{\n\t\t    \"frontId\":10001,\n            \"top\": 500,\n            \"left\": 300,\n            \"workId\": 3,\n            \"description\": \"node description\"\n\t\t},\n\t\t{\n\t\t    \"frontId\":10001,\n            \"top\": 500,\n            \"left\": 300,\n            \"workId\": 3,\n            \"description\": \"node description\"\n\t\t}\n\t]\n}",
+                "created_at": "2022-03-25T17:50:48",
+                "updated_at": null,
+                "start_time": 164762286,
+                "uuid": "cdeba7db2c124d81b9a00c26a2abea56",
+                "user_id": 3,
+                "period_cron": "@once",
+                "retry_delay": 1,
+                "edges": "edges test",
+                "description": "dag work test by slc",
+                "deleted_at": null
+            },
+            {
+                "id": 2,
+                "name": "dag-slc",
+                "end_time": 1947622861,
+                "retries": 1,
+                "relation": "slc_110 >> dag_11",
+                "nodes": "{\n\t\"nodes\":[\n\t\t{\n\t\t    \"frontId\":10001,\n            \"top\": 500,\n            \"left\": 300,\n            \"workId\": 3,\n            \"description\": \"node description\"\n\t\t},\n\t\t{\n\t\t    \"frontId\":10001,\n            \"top\": 500,\n            \"left\": 300,\n            \"workId\": 3,\n            \"description\": \"node description\"\n\t\t}\n\t]\n}",
+                "created_at": "2022-03-25T17:51:50",
+                "updated_at": null,
+                "start_time": 16476228,
+                "uuid": "fb419820445c45519d6bc3194ae9c090",
+                "user_id": 3,
+                "period_cron": "@once",
+                "retry_delay": 1,
+                "edges": "edges test",
+                "description": "dag work test by slc",
+                "deleted_at": null
+            }
+        ],
+        "total": 2
+    },
+    "msg": null
+}
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- 更新
+curl --location --request PUT 'http://localhost:3072/v1/dag-works' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "dag_id":1,
+    "edges": "edesddd"
+}'
+-- 结果
+{
+    "code": 0,
+    "data": 1,
+    "msg": null
+}
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- 删除
+curl --location --request DELETE 'http://localhost:3072/v1/dag-works/49'
+-- 结果
+{
+    "code": 0,
+    "data": 49,
+    "msg": null
+}
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- 提交至调度中心
+curl --location --request GET 'http://localhost:3072/v1/dag-works/submit/9'
+-- 结果
+{
+    "code": 0,
+    "data": true,
+    "msg": null
+}
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- ch submit
+curl --location --request POST 'http://localhost:3071/dag/ch/submit' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "dag_id": 326710,
+    "user_id":1,
+    "dag_name": "slc_dag_1013",
+    "start_date": 1647866220,
+    "end_date": 1947938400,
+    "schedule_interval": "@once",
+    "retries": 1,
+    "retry_delay": 1,
+    "node_relations": "",
+    "nodes": [
+        {
+            "node_id": 111,
+            "node_name": "slc",
+            "node_type": 1,
+            "ip": "127.0.0.1",
+            "port": 19000,
+            "user_name": "default",
+            "password": "1234",
+            "database": "default",
+            "sql": "show tables;"
+        }
+    ]
+}'
+-- 结果
+{
+    "code": 0,
+    "msg": "success",
+    "data": "/Users/xyz/airflow/dags/ch_slc_dag_1013_326710.py"
+}
+--------------------------------------------------------------------------------------------------------------------------------------------
+-- pg submit
+curl --location --request POST 'http://localhost:3071/dag/pg/submit' \
+--header 'Content-Type: application/json' \
+--header 'Cookie: session=aaace5d1-753c-4431-a8d0-7a9090547f78.J4r1IXdrAKTPFKZHFlZ5tBiSaCM' \
+--data-raw '{
+    "dag_id": 322540,
+    "user_id":1,
+    "dag_name": "slc_dag_540",
+    "start_date": 1647855900,
+    "end_date": 1947938400,
+    "schedule_interval": "@once",
+    "retries": 1,
+    "retry_delay": 1,
+    "node_relations":"slc_540",
+    "nodes": [
+        {
+            "node_id": 540,
+            "node_name": "slc",
+            "node_type": 1,
+            "ip": "127.0.0.1",
+            "port": 5432,
+            "user_name": "postgres",
+            "password": "1234",
+            "database": "postgres",
+            "sql": "INSERT INTO usertest(id, name) VALUES(540, '\''3-18-5-38'\'');"
+        }
+    ]
+}'
+-- 结果
+{
+    "code": 0,
+    "msg": "success",
+    "data": "/Users/xyz/airflow/dags/pg_slc_dag_540_322540.py"
+}
+--------------------------------------------------------------------------------------------------------------------------------------------
